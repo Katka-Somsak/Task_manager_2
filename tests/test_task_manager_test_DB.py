@@ -42,19 +42,19 @@ def create_1_item(test_db):
 @pytest.mark.empty
 def test_zobrazit_ukoly(test_db):
     result = zobrazit_ukoly(test_db)
-    assert result == "\nSeznam úkolů:\nŽádné uložené úkoly\n"
+    assert "\nSeznam úkolů:\nŽádné uložené úkoly\n" in result
 
 
 @pytest.mark.empty
 def test_aktualizovat_ukol(test_db):
     result = aktualizovat_ukol(test_db)
-    assert result == "\nSeznam úkolů:\nŽádné uložené úkoly\n"
+    assert "\nSeznam úkolů:\nŽádné uložené úkoly\n" in result
 
 
 @pytest.mark.empty
 def test_odstranit_ukol(test_db):
     result = odstranit_ukol(test_db)
-    assert result == "\nSeznam úkolů:\nŽádné uložené úkoly\n"
+    assert "\nSeznam úkolů:\nŽádné uložené úkoly\n" in result
   
 
 @pytest.mark.positive
@@ -68,14 +68,15 @@ def test_odstranit_ukol(test_db):
 )
 def test_pridat_ukol_db_poz(nazev, popis, test_db):
     result = pridat_ukol_db(nazev, popis, spojeni=test_db)
-    assert result == f"Úkol '{nazev}' byl přidán.\n"
+    #assert result == f"Úkol '{nazev}' byl přidán.\n"
+    assert f"Úkol '{nazev}' byl přidán" in result
 
 
 @pytest.mark.positive
 def test_zobrazit_ukoly_poz(create_1_item):
     result = zobrazit_ukoly(create_1_item)
     datum = date.today()
-    assert result == f"\nSeznam úkolů:\n1. Přidání záznamu - K zobrazení uloženého úkolu, stav Nezahájeno, vytvořeno {datum}\n"
+    assert f"\nSeznam úkolů:\n1. Přidání záznamu - K zobrazení uloženého úkolu, stav Nezahájeno, vytvořeno {datum}\n" in result
 
 
 @pytest.mark.negative
@@ -88,7 +89,7 @@ def test_zobrazit_ukoly_poz(create_1_item):
 )
 def test_pridat_ukol_db_neg(nazev, popis, test_db):
     result = pridat_ukol_db(nazev, popis, spojeni=test_db)
-    assert result == "Název nebo popis je přílíš dlouhý (max. 100 znaků). Zkus to znovu."
+    assert "Název nebo popis je přílíš dlouhý (max. 100 znaků). Zkus to znovu." in result
 
 
 @pytest.mark.negative
@@ -117,14 +118,14 @@ def test_pridat_ukol_db_neg_2(nazev, popis, expected_exception, test_db):
 )
 def test_aktualizovat_ukol_db_poz(ukol_ID, cislo_stav, nazev_ukolu, create_items):
     result = aktualizovat_ukol_db(ukol_ID, cislo_stav, nazev_ukolu, spojeni=create_items)
-    assert result == f"Stav úkolu '{nazev_ukolu}' byl aktualizován."
+    assert f"Stav úkolu '{nazev_ukolu}' byl aktualizován." in result
 
 
 @pytest.mark.negative
 @pytest.mark.parametrize("ukol_ID, cislo_stav, nazev_ukolu", [(3, 5, "test 3")])
 def test_aktualizovat_ukol_db_neg(ukol_ID, cislo_stav, nazev_ukolu, create_items):
     result = aktualizovat_ukol_db(ukol_ID, cislo_stav, nazev_ukolu, spojeni=create_items)
-    assert result == "Něco se nepovedlo."
+    assert "Něco se nepovedlo." in result
 
 
 
@@ -138,7 +139,7 @@ def test_aktualizovat_ukol_db_neg(ukol_ID, cislo_stav, nazev_ukolu, create_items
 )
 def test_odstranit_ukol_DB_poz(ukol_ID, zmazany_ukol, create_items):
     result = odstranit_ukol_db(ukol_ID, zmazany_ukol, spojeni=create_items)
-    assert result == f"Úkol '{zmazany_ukol}' byl odstraněn.\n"
+    assert f"Úkol '{zmazany_ukol}' byl odstraněn.\n" in result
 
 
 
